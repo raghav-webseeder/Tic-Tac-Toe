@@ -1,9 +1,16 @@
 const { createServer } = require("http");
 const { Server } = require("socket.io");
+const dotenv = require("dotenv");
+
+dotenv.config(); // Load .env for local dev
+
+const PORT = process.env.PORT || 3000;
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
-  cors: "*",
+  cors: {
+    origin: "*", // Allow all origins (you can restrict this in production)
+  },
 });
 
 const allUsers = {};
@@ -82,4 +89,6 @@ io.on("connection", (socket) => {
   });
 });
 
-httpServer.listen(3000);
+httpServer.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
